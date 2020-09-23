@@ -24,10 +24,12 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string APPSETTINGS_SAPINDEXHTMLSUBPATH = "SAPINDEXHTMLSUBPATH";
         private const string APPSETTINGS_SAPMAINVIEWMLSUBPATH = "SAPMAINVIEWXMLSUBPATH";
+        private const string APPSETTINGS_SAPMAINCONTROLLERSUBPATH = "SAPMAINCONTROLLERSUBPATH";
         private const string APPSETTINGS_TITLE = "TITLE";
         private const string APPSETTINGS_HEADERTEXT = "HEADERTEXT";
         private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
         private const string APPSETTINGS_TABLEID = "TABLEID";
+        private const string APPSETTINGS_ODATAURL = "ODATAURL";
         private const string APPSETTINGS_SAPINDEXHTMLOUTPUTPATH = "SAPINDEXHTMLOUTPUTPATH";
         
 
@@ -65,6 +67,18 @@ namespace CSSAPODataViewAndControllerGenerator
                 TableId = Config[APPSETTINGS_TABLEID]
             }
                 .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(MyCar)));
+
+            new SAPMainControllerGenerator()
+            {
+                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
+                ,
+                TemplateSubPath = Config[APPSETTINGS_SAPMAINCONTROLLERSUBPATH]
+                ,
+                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
+                ,
+                ODataURL = Config[APPSETTINGS_ODATAURL]
+            }
+                .Generate();
 
 
         } // run
