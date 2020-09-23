@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CSSAPODataViewAndControllerGenerator
 {
-    class SAPTableViewGenerator
+    class SAPFormViewGenerator
     {
 
         #region members
@@ -14,19 +14,16 @@ namespace CSSAPODataViewAndControllerGenerator
         public string TemplatePath { get; set; }
         public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
-        public string HeaderText { get; set; }
-        public string EntityName { get; set; }
-        public string TableId { get; set; }
+        public string FormTitle { get; set; }
+        public string PageTitle { get; set; }
 
         public Ac4yClass Type { get; set; }
 
         private const string TemplateExtension = ".xmlT";
 
-        private const string HeaderTextMask = "#headerText#";
-        private const string EntityNameMask = "#entityName#";
-        private const string TableIdMask = "#tableId#";
+        private const string PageTitleMask = "#pageTitle#";
+        private const string FormTitleMask = "#formTitle#";
         private const string PropertyNameMask = "#propertyName#";
-        private const string PropertyPathMask = "#propertyPath#";
 
         #endregion members
 
@@ -67,7 +64,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
-                        .Replace(HeaderTextMask, HeaderText)
+                        .Replace(PageTitleMask, PageTitle)
                         ;
 
         }
@@ -81,9 +78,9 @@ namespace CSSAPODataViewAndControllerGenerator
         }
 
 
-        private string GetTableItem()
+        private string GetContent()
         {
-            string text = ReadIntoString("tableItem");
+            string text = ReadIntoString("content");
             string returnText = "";
 
             for (int i = 0; i < Type.PropertyList.Count; i++)
@@ -92,31 +89,7 @@ namespace CSSAPODataViewAndControllerGenerator
                 {
                 }
                 else
-                {
-                    returnText += text.Replace(PropertyPathMask, Type.PropertyList[i].Name);
-                }
-            }
-
-            return returnText;
-        }
-
-        private string GetTableCells()
-        {
-            return ReadIntoString("tableCells");
-        }
-
-        private string GetTableColumn()
-        {
-            string text = ReadIntoString("tableColumns");
-            string returnText = "";
-
-            for (int i = 0; i < Type.PropertyList.Count; i++)
-            {
-                if (Type.PropertyList[i].Name.Equals("Id"))
-                {
-                }
-                else
-                {
+                { 
                     returnText += text.Replace(PropertyNameMask, Type.PropertyList[i].Name);
                 }
             }
@@ -124,39 +97,34 @@ namespace CSSAPODataViewAndControllerGenerator
             return returnText;
         }
 
-        private string GetTableHead()
+        private string GetFormHead()
         {
-            return ReadIntoString("tableHead")
-                    .Replace(TableIdMask, TableId)
-                    .Replace(EntityNameMask, EntityName);
+            return ReadIntoString("formHead")
+                    .Replace(FormTitleMask, FormTitle);
         }
 
 
-        public SAPTableViewGenerator Generate()
+        public SAPFormViewGenerator Generate()
         {
 
             string result = null;
 
             result += GetHead();
 
-            result += GetTableHead();
+            result += GetFormHead();
 
-            result += GetTableColumn();
-
-            result += GetTableCells();
-
-            result += GetTableItem();
+            result += GetContent();
 
             result += GetFoot();
 
-            WriteOut(result, "Main.view", OutputPath);
+            WriteOut(result, "Form.view", OutputPath);
 
             return this;
 
         } // Generate
 
 
-        public SAPTableViewGenerator Generate(Ac4yClass type)
+        public SAPFormViewGenerator Generate(Ac4yClass type)
         {
 
             Type = type;

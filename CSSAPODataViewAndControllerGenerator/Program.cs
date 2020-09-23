@@ -25,7 +25,11 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_SAPINDEXHTMLSUBPATH = "SAPINDEXHTMLSUBPATH";
         private const string APPSETTINGS_SAPMAINVIEWMLSUBPATH = "SAPMAINVIEWXMLSUBPATH";
         private const string APPSETTINGS_SAPMAINCONTROLLERSUBPATH = "SAPMAINCONTROLLERSUBPATH";
+        private const string APPSETTINGS_SAPFORMVIEWXMLSUBPATH = "SAPFORMVIEWXMLSUBPATH";
+        private const string APPSETTINGS_SAPFORCONTROLLERSUBPATH = "SAPFORMCONTROLLERSUBPATH";
         private const string APPSETTINGS_TITLE = "TITLE";
+        private const string APPSETTINGS_FORMTITLE = "FORMTITLE";
+        private const string APPSETTINGS_PAGETITLE = "PAGETITLE";
         private const string APPSETTINGS_HEADERTEXT = "HEADERTEXT";
         private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
         private const string APPSETTINGS_TABLEID = "TABLEID";
@@ -66,7 +70,7 @@ namespace CSSAPODataViewAndControllerGenerator
                 ,
                 TableId = Config[APPSETTINGS_TABLEID]
             }
-                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(MyCar)));
+                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(Vendor)));
 
             new SAPMainControllerGenerator()
             {
@@ -80,7 +84,34 @@ namespace CSSAPODataViewAndControllerGenerator
             }
                 .Generate();
 
+            new SAPFormViewGenerator()
+            {
+                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
+                ,
+                TemplateSubPath = Config[APPSETTINGS_SAPFORMVIEWXMLSUBPATH]
+                ,
+                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
+                ,
+                FormTitle = Config[APPSETTINGS_FORMTITLE]
+                ,
+                PageTitle = Config[APPSETTINGS_PAGETITLE]
+            }
+                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(Vendor)));
 
+            new SAPFormControllerGenerator()
+            {
+                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
+                ,
+                TemplateSubPath = Config[APPSETTINGS_SAPFORCONTROLLERSUBPATH]
+                ,
+                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
+                ,
+                ODataURL = Config[APPSETTINGS_ODATAURL]
+                ,
+                EntityName = Config[APPSETTINGS_ENTITYNAME]
+            }
+                .Generate();
+            
         } // run
 
         static void Main(string[] args)
