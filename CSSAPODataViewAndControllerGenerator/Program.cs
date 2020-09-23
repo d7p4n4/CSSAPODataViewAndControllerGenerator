@@ -23,7 +23,11 @@ namespace CSSAPODataViewAndControllerGenerator
         // JAVA //
 
         private const string APPSETTINGS_SAPINDEXHTMLSUBPATH = "SAPINDEXHTMLSUBPATH";
+        private const string APPSETTINGS_SAPMAINVIEWMLSUBPATH = "SAPMAINVIEWXMLSUBPATH";
         private const string APPSETTINGS_TITLE = "TITLE";
+        private const string APPSETTINGS_HEADERTEXT = "HEADERTEXT";
+        private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
+        private const string APPSETTINGS_TABLEID = "TABLEID";
         private const string APPSETTINGS_SAPINDEXHTMLOUTPUTPATH = "SAPINDEXHTMLOUTPUTPATH";
         
 
@@ -46,17 +50,21 @@ namespace CSSAPODataViewAndControllerGenerator
             persistenceLista.Add(typeof(Cars));
             persistenceLista.Add(typeof(Colors));
 
-            new SAPIndexHTMLGenerator()
+            new SAPTableViewGenerator()
             {
                 TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
                 ,
-                TemplateSubPath = Config[APPSETTINGS_SAPINDEXHTMLSUBPATH]
+                TemplateSubPath = Config[APPSETTINGS_SAPMAINVIEWMLSUBPATH]
                 ,
                 OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
                 ,
-                Title = Config[APPSETTINGS_TITLE]
+                HeaderText = Config[APPSETTINGS_HEADERTEXT]
+                ,
+                EntityName = Config[APPSETTINGS_ENTITYNAME]
+                ,
+                TableId = Config[APPSETTINGS_TABLEID]
             }
-                .Generate();
+                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(MyCar)));
 
 
         } // run

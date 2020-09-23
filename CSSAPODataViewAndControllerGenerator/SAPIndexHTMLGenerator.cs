@@ -14,16 +14,12 @@ namespace CSSAPODataViewAndControllerGenerator
         public string TemplatePath { get; set; }
         public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
-        public string PackageName { get; set; }
+        public string Title { get; set; }
 
-        public Ac4yClass Type { get; set; }
 
-        private const string TemplateExtension = ".xmlT";
+        private const string TemplateExtension = ".htmlT";
 
-        private const string PackageNameMask = "#packageName#";
-        private const string TableNameMask = "#tableName#";
-        private const string TypeMask = "#type#";
-        private const string PropertyNameMask = "#propertyName#";
+        private const string TitleMask = "#title#";
 
         #endregion members
 
@@ -38,7 +34,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
         public void WriteOut(string text, string fileName, string outputPath)
         {
-            File.WriteAllText(outputPath + fileName + ".java", text);
+            File.WriteAllText(outputPath + fileName + ".html", text);
 
         }
 
@@ -63,8 +59,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
-                        .Replace(PackageNameMask, PackageName)
-                        .Replace(TableNameMask, Type.Name)
+                        .Replace(TitleMask, Title)
                         ;
 
         }
@@ -77,94 +72,29 @@ namespace CSSAPODataViewAndControllerGenerator
 
         }
 
-        public string GetMethods()
+        private string GetBody()
         {
-            return
-                ReadIntoString("Methods")
-                ;
+            return ReadIntoString("body");
         }
 
-        private string GetGetSet()
-        {
-            string text = ReadIntoString("getSet");
-            string returnText = "";
-
-            for (int i = 0; i <= Type.PropertyList.Count - 12; i++)
-            {
-                if (Type.PropertyList[i].TypeName.Equals("DateTime"))
-                {
-                    returnText += text.Replace(TypeMask, "Calendar")
-                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name);
-
-                }
-                else
-                {
-                    returnText += text.Replace(TypeMask, Type.PropertyList[i].TypeName)
-                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name);
-                }
-            }
-
-            return returnText;
-        }
-
-        public string GetProperty()
-        {
-            string text = ReadIntoString("property");
-            string returnText = "";
-
-            for (int i = 0; i <= Type.PropertyList.Count - 12; i++)
-            {
-                if (Type.PropertyList[i].TypeName.Equals("DateTime"))
-                {
-                    returnText += "\n @Temporal(TemporalType.DATE)" + text.Replace(TypeMask, "Calendar")
-                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name);
-
-                }
-                else
-                {
-                    returnText += text.Replace(TypeMask, Type.PropertyList[i].TypeName)
-                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name);
-                }
-            }
-
-            return returnText;
-
-        }
-
-        public SAPTableViewGenerator Generate()
+        public SAPIndexHTMLGenerator Generate()
         {
 
             string result = null;
 
             result += GetHead();
 
-            result += GetTableHead();
-
-            result += GetTableColumn();
-
-            result += GetTableCells();
-
-            result += GetTableColumns();
-
-            result += GetTableFoot();
+            result += GetBody();
 
             result += GetFoot();
 
-            WriteOut(result, Type.Name, OutputPath);
+            WriteOut(result, "index", OutputPath);
 
             return this;
 
         } // Generate
 
 
-        public SAPTableViewGenerator Generate(Ac4yClass type)
-        {
-
-            Type = type;
-
-            return Generate();
-
-        } // Generate
 
         public void Dispose()
         {
