@@ -34,6 +34,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
         private const string APPSETTINGS_TABLEID = "TABLEID";
         private const string APPSETTINGS_ODATAURL = "ODATAURL";
+        private const string APPSETTINGS_COMBOBOXENTITY = "COMBOBOXENTITY";
         private const string APPSETTINGS_SAPINDEXHTMLOUTPUTPATH = "SAPINDEXHTMLOUTPUTPATH";
         
 
@@ -54,7 +55,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
             List<Type> persistenceLista = new List<Type>();
             persistenceLista.Add(typeof(Cars));
-            persistenceLista.Add(typeof(Colors));
+            persistenceLista.Add(typeof(Color));
 
             new SAPTableViewGenerator()
             {
@@ -95,6 +96,8 @@ namespace CSSAPODataViewAndControllerGenerator
                 FormTitle = Config[APPSETTINGS_FORMTITLE]
                 ,
                 PageTitle = Config[APPSETTINGS_PAGETITLE]
+                ,
+                ComboBoxEntityName = Config[APPSETTINGS_COMBOBOXENTITY]
             }
                 .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(Vendor)));
 

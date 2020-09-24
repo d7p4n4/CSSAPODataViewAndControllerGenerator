@@ -16,6 +16,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string OutputPath { get; set; }
         public string FormTitle { get; set; }
         public string PageTitle { get; set; }
+        public string ComboBoxEntityName {get;set;}
 
         public Ac4yClass Type { get; set; }
 
@@ -24,8 +25,34 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string PageTitleMask = "#pageTitle#";
         private const string FormTitleMask = "#formTitle#";
         private const string PropertyNameMask = "#propertyName#";
+        private const string InputFieldMask = "#inputField#";
+        private const string ComboboxEntityMask = "#comboboxEntity#";
+
+        public Dictionary<string, string> InputMezoKonverziok = new Dictionary<string, string>()
+        {
+            { "TEXTBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" },
+            { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#', targetType: 'any', formatter: '.toBoolean'}\" />" },
+            { "NODEF", "<DateTimePicker id=\"#propertyName#Id\" value=\"{path: '#propertyName#'}\" valueFormat=\"yyyy-MM-ddTHH:mm:ss\" displayFormat=\"yyyy-MM-ddTHH:mm:ss\" />" },
+            {"COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
+                         "   <core:Item key=\"{Name}\" text=\"{Name}\" />\n " +
+                         "</ComboBox>" }
+        };
 
         #endregion members
+
+        public string GetInputField(string type)
+        {
+            string result = null;
+            try
+            {
+                result = InputMezoKonverziok[type];
+            }
+            catch (Exception exception)
+            {
+                result = "nodeftype (" + type + ")";
+            }
+            return result;
+        } // GetConvertedType
 
         public string ReadIntoString(string fileName)
         {
@@ -89,8 +116,12 @@ namespace CSSAPODataViewAndControllerGenerator
                 {
                 }
                 else
-                { 
-                    returnText += text.Replace(PropertyNameMask, Type.PropertyList[i].Name);
+                {
+                    returnText += text.Replace(InputFieldMask, GetInputField(Type.PropertyList[i].WidgetType))
+                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name)
+                                      .Replace(ComboboxEntityMask, ComboBoxEntityName);
+
+                    //returnText = returnText.Replace(PropertyNameMask, Type.PropertyList[i].Name);
                 }
             }
 
