@@ -14,11 +14,15 @@ namespace CSSAPODataViewAndControllerGenerator
         public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string ODataURL { get; set; }
+        public string SearchField { get; set; }
+        public string SortField { get; set; }
 
 
         private const string TemplateExtension = ".jsT";
 
-        private const string ODataURLMask = "#odataURL#";
+        private const string ODataURLMask = "#odataUrl#";
+        private const string SearchFieldMask = "#searchField#";
+        private const string SortFieldMask = "#sortField#";
 
         #endregion members
 
@@ -74,7 +78,9 @@ namespace CSSAPODataViewAndControllerGenerator
         private string GetMethods()
         {
             return ReadIntoString("methods")
-                    .Replace(ODataURLMask, ODataURL);
+                    .Replace(ODataURLMask, ODataURL)
+                    .Replace(SortFieldMask, SortField)
+                    .Replace(SearchFieldMask, SearchField);
         }
 
         public SAPMainControllerGenerator Generate()

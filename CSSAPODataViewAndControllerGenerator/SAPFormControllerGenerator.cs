@@ -19,7 +19,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string TemplateExtension = ".jsT";
 
-        private const string ODataURLMask = "#odataURL#";
+        private const string ODataURLMask = "#odataUrl#";
         private const string EntityNameMask = "#entityName#";
 
         #endregion members

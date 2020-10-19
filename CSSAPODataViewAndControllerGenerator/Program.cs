@@ -27,10 +27,10 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_SAPMAINCONTROLLERSUBPATH = "SAPMAINCONTROLLERSUBPATH";
         private const string APPSETTINGS_SAPFORMVIEWXMLSUBPATH = "SAPFORMVIEWXMLSUBPATH";
         private const string APPSETTINGS_SAPFORCONTROLLERSUBPATH = "SAPFORMCONTROLLERSUBPATH";
-        private const string APPSETTINGS_TITLE = "TITLE";
+        private const string APPSETTINGS_SORTFIELD = "SORTFIELD";
         private const string APPSETTINGS_FORMTITLE = "FORMTITLE";
         private const string APPSETTINGS_PAGETITLE = "PAGETITLE";
-        private const string APPSETTINGS_HEADERTEXT = "HEADERTEXT";
+        private const string APPSETTINGS_SEARCHFIELD = "SEARCHFIELD";
         private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
         private const string APPSETTINGS_TABLEID = "TABLEID";
         private const string APPSETTINGS_ODATAURL = "ODATAURL";
@@ -65,8 +65,6 @@ namespace CSSAPODataViewAndControllerGenerator
                 ,
                 OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
                 ,
-                HeaderText = Config[APPSETTINGS_HEADERTEXT]
-                ,
                 EntityName = Config[APPSETTINGS_ENTITYNAME]
                 ,
                 TableId = Config[APPSETTINGS_TABLEID]
@@ -82,9 +80,25 @@ namespace CSSAPODataViewAndControllerGenerator
                 OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
                 ,
                 ODataURL = Config[APPSETTINGS_ODATAURL]
+                ,
+                SearchField = Config[APPSETTINGS_SEARCHFIELD]
+                ,
+                SortField = Config[APPSETTINGS_SORTFIELD]
             }
                 .Generate();
 
+            new SAPIndexHTMLGenerator()
+            {
+                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
+                ,
+                TemplateSubPath = Config[APPSETTINGS_SAPINDEXHTMLSUBPATH]
+                ,
+                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
+                ,
+                Title = Config[APPSETTINGS_PAGETITLE]
+            }
+                .Generate();
+            
             new SAPFormViewGenerator()
             {
                 TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]

@@ -14,7 +14,6 @@ namespace CSSAPODataViewAndControllerGenerator
         public string TemplatePath { get; set; }
         public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
-        public string HeaderText { get; set; }
         public string EntityName { get; set; }
         public string TableId { get; set; }
 
@@ -22,7 +21,6 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string TemplateExtension = ".xmlT";
 
-        private const string HeaderTextMask = "#headerText#";
         private const string EntityNameMask = "#entityName#";
         private const string TableIdMask = "#tableId#";
         private const string PropertyNameMask = "#propertyName#";
@@ -67,7 +65,6 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
-                        .Replace(HeaderTextMask, HeaderText)
                         ;
 
         }
