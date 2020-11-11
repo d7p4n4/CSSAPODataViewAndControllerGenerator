@@ -10,12 +10,12 @@ namespace CSSAPODataViewAndControllerGenerator
 
         #region members
 
-        public string TemplatePath { get; set; }
-        public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string ODataURL { get; set; }
         public string SearchField { get; set; }
         public string SortField { get; set; }
+        public string TableId { get; set; }
+        public string EntityName { get; set; }
 
 
         private const string TemplateExtension = ".jsT";
@@ -23,13 +23,15 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string ODataURLMask = "#odataUrl#";
         private const string SearchFieldMask = "#searchField#";
         private const string SortFieldMask = "#sortField#";
+        private const string TableIdMask = "#tableId#";
+        private const string FormViewIdMask = "#formViewId#";
 
         #endregion members
 
         public string ReadIntoString(string fileName)
         {
 
-            string textFile = TemplatePath + TemplateSubPath + fileName + TemplateExtension;
+            string textFile = "SAP\\MainController\\" + fileName + TemplateExtension;
 
             return File.ReadAllText(textFile);
 
@@ -38,7 +40,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + fileName + ".js", text);
+            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\" + fileName + ".js", text);
 
         }
 
@@ -78,9 +80,11 @@ namespace CSSAPODataViewAndControllerGenerator
         private string GetMethods()
         {
             return ReadIntoString("methods")
+                    .Replace(FormViewIdMask, EntityName)
                     .Replace(ODataURLMask, ODataURL)
                     .Replace(SortFieldMask, SortField)
-                    .Replace(SearchFieldMask, SearchField);
+                    .Replace(SearchFieldMask, SearchField)
+                    .Replace(TableIdMask, TableId);
         }
 
         public SAPMainControllerGenerator Generate()
@@ -94,7 +98,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             result += GetFoot();
 
-            WriteOut(result, "Main.controller", OutputPath);
+            WriteOut(result, EntityName + "Main.controller", OutputPath);
 
             return this;
 

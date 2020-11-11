@@ -1,6 +1,8 @@
 ﻿using Ac4yClassModule.Class;
 using Ac4yClassModule.Service;
+using Ac4yUtilityContainer;
 using CSClassLibForJavaOData;
+using CSVendorTervezoProba;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.Configuration;
@@ -17,16 +19,8 @@ namespace CSSAPODataViewAndControllerGenerator
         #region members
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private Assembly _library { get; set; }
 
-        private const string APPSETTINGS_TEMPLATEPATH = "TEMPLATEPATH";
-
-        // JAVA //
-
-        private const string APPSETTINGS_SAPINDEXHTMLSUBPATH = "SAPINDEXHTMLSUBPATH";
-        private const string APPSETTINGS_SAPMAINVIEWMLSUBPATH = "SAPMAINVIEWXMLSUBPATH";
-        private const string APPSETTINGS_SAPMAINCONTROLLERSUBPATH = "SAPMAINCONTROLLERSUBPATH";
-        private const string APPSETTINGS_SAPFORMVIEWXMLSUBPATH = "SAPFORMVIEWXMLSUBPATH";
-        private const string APPSETTINGS_SAPFORCONTROLLERSUBPATH = "SAPFORMCONTROLLERSUBPATH";
         private const string APPSETTINGS_SORTFIELD = "SORTFIELD";
         private const string APPSETTINGS_FORMTITLE = "FORMTITLE";
         private const string APPSETTINGS_PAGETITLE = "PAGETITLE";
@@ -35,9 +29,16 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_TABLEID = "TABLEID";
         private const string APPSETTINGS_ODATAURL = "ODATAURL";
         private const string APPSETTINGS_COMBOBOXENTITY = "COMBOBOXENTITY";
-        private const string APPSETTINGS_SAPINDEXHTMLOUTPUTPATH = "SAPINDEXHTMLOUTPUTPATH";
-        
+        private const string APPSETTINGS_OUTPUTPATH = "OUTPUTPATH";
 
+        private const string APPSETTINGS_LIBRARYPATH = "LIBRARYPATH";
+        private const string APPSETTINGS_PLANOBJECTNAMESPACE = "PLANOBJECTNAMESPACE";
+        private const string APPSETTINGS_CLASSNAME = "CLASSNAME";
+
+        private const string APPSETTINGS_PARAMETERPATH = "PARAMETERPATH";
+        private const string APPSETTINGS_PARAMETERFILENAME = "PARAMETERFILENAME";
+
+        CSODataGeneratorParameter Parameter { get; set; }
 
 
         public IConfiguration Config { get; set; }
@@ -53,81 +54,99 @@ namespace CSSAPODataViewAndControllerGenerator
 
         public void Run()
         {
-            List<Type> persistenceLista = new List<Type>();
-            persistenceLista.Add(typeof(Cars));
-            persistenceLista.Add(typeof(Color));
+            _library = Assembly.LoadFile(
+                        Config[APPSETTINGS_LIBRARYPATH]
+                    );
 
-            new SAPTableViewGenerator()
-            {
-                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
-                ,
-                TemplateSubPath = Config[APPSETTINGS_SAPMAINVIEWMLSUBPATH]
-                ,
-                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
-                ,
-                EntityName = Config[APPSETTINGS_ENTITYNAME]
-                ,
-                TableId = Config[APPSETTINGS_TABLEID]
-            }
-                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(Vendor)));
+            Parameter =
+                (CSODataGeneratorParameter)
+                new Ac4yUtility().Xml2ObjectFromFile(
+                        Config[APPSETTINGS_PARAMETERPATH]
+                        + Config[APPSETTINGS_PARAMETERFILENAME]
+                        , typeof(CSODataGeneratorParameter)
+                    );
 
-            new SAPMainControllerGenerator()
+            foreach (PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
             {
-                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
-                ,
-                TemplateSubPath = Config[APPSETTINGS_SAPMAINCONTROLLERSUBPATH]
-                ,
-                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
-                ,
-                ODataURL = Config[APPSETTINGS_ODATAURL]
-                ,
-                SearchField = Config[APPSETTINGS_SEARCHFIELD]
-                ,
-                SortField = Config[APPSETTINGS_SORTFIELD]
-            }
-                .Generate();
+                planObject.classType = _library.GetType(
+                                                    planObject.namespaceName
+                                                    + planObject.className
+                                                    );
 
-            new SAPIndexHTMLGenerator()
-            {
-                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
-                ,
-                TemplateSubPath = Config[APPSETTINGS_SAPINDEXHTMLSUBPATH]
-                ,
-                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
-                ,
-                Title = Config[APPSETTINGS_PAGETITLE]
             }
-                .Generate();
-            
-            new SAPFormViewGenerator()
-            {
-                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
-                ,
-                TemplateSubPath = Config[APPSETTINGS_SAPFORMVIEWXMLSUBPATH]
-                ,
-                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
-                ,
-                FormTitle = Config[APPSETTINGS_FORMTITLE]
-                ,
-                PageTitle = Config[APPSETTINGS_PAGETITLE]
-                ,
-                ComboBoxEntityName = Config[APPSETTINGS_COMBOBOXENTITY]
-            }
-                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(typeof(Vendor)));
 
-            new SAPFormControllerGenerator()
+            try
             {
-                TemplatePath = Config[APPSETTINGS_TEMPLATEPATH]
+
+                new SAPIndexHTMLGenerator()
+                {
+                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    Title = Config[APPSETTINGS_PAGETITLE]
+                    ,
+                    Parameter = Parameter
+                }
+                    .Generate();
+
+                foreach (PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
+                {
+                    Directory.CreateDirectory(Config[APPSETTINGS_OUTPUTPATH] + "sources\\" + planObject.className);
+
+                    new SAPTableViewGenerator()
+                    {
+                        OutputPath = Config[APPSETTINGS_OUTPUTPATH] 
+                    ,
+                        EntityName = planObject.className
+                    ,
+                        TableId = Config[APPSETTINGS_TABLEID]
+                    }
+                    .Generate(new Ac4yClassHandler().GetAc4yClassFromType(planObject.classType));
+                
+                new SAPMainControllerGenerator()
+                {
+                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    ODataURL = Config[APPSETTINGS_ODATAURL]
+                    ,
+                    SearchField = Config[APPSETTINGS_SEARCHFIELD]
+                    ,
+                    SortField = Config[APPSETTINGS_SORTFIELD]
+                    ,
+                    TableId = Config[APPSETTINGS_TABLEID]
+                    ,
+                    EntityName = planObject.className
+                }
+                    .Generate();
+
+
+                new SAPFormViewGenerator()
+                {
+                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
                 ,
-                TemplateSubPath = Config[APPSETTINGS_SAPFORCONTROLLERSUBPATH]
+                    FormTitle = Config[APPSETTINGS_FORMTITLE]
                 ,
-                OutputPath = Config[APPSETTINGS_SAPINDEXHTMLOUTPUTPATH]
+                    PageTitle = Config[APPSETTINGS_PAGETITLE]
                 ,
-                ODataURL = Config[APPSETTINGS_ODATAURL]
-                ,
-                EntityName = Config[APPSETTINGS_ENTITYNAME]
+                    ComboBoxEntityName = Config[APPSETTINGS_COMBOBOXENTITY]
+                }
+                .Generate(new Ac4yClassHandler().GetAc4yClassFromType(planObject.classType));
+
+
+                new SAPFormControllerGenerator()
+                {
+                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    ODataURL = Config[APPSETTINGS_ODATAURL]
+                    ,
+                    EntityName = planObject.className
+                }
+                    .Generate();
             }
-                .Generate();
+
+            } catch(Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
             
         } // run
 

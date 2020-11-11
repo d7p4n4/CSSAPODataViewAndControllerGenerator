@@ -11,22 +11,23 @@ namespace CSSAPODataViewAndControllerGenerator
 
         #region members
 
-        public string TemplatePath { get; set; }
-        public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string Title { get; set; }
+        public CSODataGeneratorParameter Parameter { get; set; }
 
 
         private const string TemplateExtension = ".htmlT";
 
         private const string TitleMask = "#title#";
+        private const string PagesMask = "#pages#";
+        private const string PageNameMask = "#pageName#";
 
         #endregion members
 
         public string ReadIntoString(string fileName)
         {
 
-            string textFile = TemplatePath + TemplateSubPath + fileName + TemplateExtension;
+            string textFile = "SAP\\indexHTML\\" + fileName + TemplateExtension;
 
             return File.ReadAllText(textFile);
 
@@ -74,7 +75,17 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private string GetBody()
         {
-            return ReadIntoString("body");
+            string pagesText = ReadIntoString("pages");
+            string editedPagesText = "";
+
+            foreach(PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
+            {
+                editedPagesText = editedPagesText + pagesText.Replace(PageNameMask, planObject.className);
+            }
+
+            return ReadIntoString("body")
+                        .Replace(PagesMask, editedPagesText)
+                ;
         }
 
         public SAPIndexHTMLGenerator Generate()

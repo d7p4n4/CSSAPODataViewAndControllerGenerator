@@ -10,8 +10,6 @@ namespace CSSAPODataViewAndControllerGenerator
 
         #region members
 
-        public string TemplatePath { get; set; }
-        public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string ODataURL { get; set; }
         public string EntityName { get; set; }
@@ -21,13 +19,14 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string ODataURLMask = "#odataUrl#";
         private const string EntityNameMask = "#entityName#";
+        private const string ControllerNameMask = "#controllerName#";
 
         #endregion members
 
         public string ReadIntoString(string fileName)
         {
 
-            string textFile = TemplatePath + TemplateSubPath + fileName + TemplateExtension;
+            string textFile = "SAP\\FormController\\" + fileName + TemplateExtension;
 
             return File.ReadAllText(textFile);
 
@@ -36,7 +35,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + fileName + ".js", text);
+            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\" + fileName + ".js", text);
 
         }
 
@@ -61,6 +60,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
+                        .Replace(ControllerNameMask, EntityName + "Controller")
                         ;
 
         }
@@ -91,7 +91,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             result += GetFoot();
 
-            WriteOut(result, "Form.controller", OutputPath);
+            WriteOut(result, EntityName + "Form.controller", OutputPath);
 
             return this;
 

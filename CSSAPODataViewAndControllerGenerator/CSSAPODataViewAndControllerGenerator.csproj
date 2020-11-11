@@ -24,6 +24,9 @@
     <Reference Include="CSClassLibForJavaOData">
       <HintPath>..\..\CSClassLibForJavaOData\CSClassLibForJavaOData\bin\Debug\netcoreapp3.1\CSClassLibForJavaOData.dll</HintPath>
     </Reference>
+    <Reference Include="CSVendorTervezoProba">
+      <HintPath>..\..\CSVendorTervezoProba\CSVendorTervezoProba\bin\Debug\netcoreapp3.1\CSVendorTervezoProba.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

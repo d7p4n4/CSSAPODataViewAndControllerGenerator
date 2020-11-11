@@ -11,8 +11,6 @@ namespace CSSAPODataViewAndControllerGenerator
 
         #region members
 
-        public string TemplatePath { get; set; }
-        public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string EntityName { get; set; }
         public string TableId { get; set; }
@@ -31,7 +29,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string ReadIntoString(string fileName)
         {
 
-            string textFile = TemplatePath + TemplateSubPath + fileName + TemplateExtension;
+            string textFile = "SAP\\MainViewXML\\" + fileName + TemplateExtension;
 
             return File.ReadAllText(textFile);
 
@@ -40,7 +38,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + fileName + ".xml", text);
+            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\" + fileName + ".xml", text);
 
         }
 
@@ -64,7 +62,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string GetHead()
         {
 
-            return ReadIntoString("Head")
+            return ReadIntoString("head")
                         ;
 
         }
@@ -72,7 +70,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string GetFoot()
         {
             return
-                ReadIntoString("Foot")
+                ReadIntoString("foot")
                         ;
 
         }
@@ -146,7 +144,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             result += GetFoot();
 
-            WriteOut(result, "Main.view", OutputPath);
+            WriteOut(result, Type.Name + "Main.view", OutputPath);
 
             return this;
 

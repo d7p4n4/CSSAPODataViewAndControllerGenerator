@@ -11,8 +11,6 @@ namespace CSSAPODataViewAndControllerGenerator
 
         #region members
 
-        public string TemplatePath { get; set; }
-        public string TemplateSubPath { get; set; }
         public string OutputPath { get; set; }
         public string FormTitle { get; set; }
         public string PageTitle { get; set; }
@@ -27,11 +25,13 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string PropertyNameMask = "#propertyName#";
         private const string InputFieldMask = "#inputField#";
         private const string ComboboxEntityMask = "#comboboxEntity#";
+        private const string FormViewIdMask = "#formViewId#";
+        private const string ControllerNameMask = "#controllerName#";
 
         public Dictionary<string, string> InputMezoKonverziok = new Dictionary<string, string>()
         {
             { "TEXTBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" },
-            { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#', targetType: 'any', formatter: '.toBoolean'}\" />" },
+            { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#'}\" />" },
             { "NODEF", "<DateTimePicker id=\"#propertyName#Id\" value=\"{path: '#propertyName#'}\" valueFormat=\"yyyy-MM-ddTHH:mm:ss\" displayFormat=\"yyyy-MM-ddTHH:mm:ss\" />" },
             /*{"COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
                          "   <core:Item key=\"{Name}\" text=\"{Name}\" />\n " +
@@ -43,7 +43,11 @@ namespace CSSAPODataViewAndControllerGenerator
 
         public string GetInputField(string type)
         {
-            string result = null;
+            string result = "";
+            if (type == null)
+            {
+                type = "TEXTBOX";
+            }
             try
             {
                 result = InputMezoKonverziok[type];
@@ -52,13 +56,14 @@ namespace CSSAPODataViewAndControllerGenerator
             {
                 result = "nodeftype (" + type + ")";
             }
+            
             return result;
         } // GetConvertedType
 
         public string ReadIntoString(string fileName)
         {
 
-            string textFile = TemplatePath + TemplateSubPath + fileName + TemplateExtension;
+            string textFile = "SAP\\FormViewXML\\" + fileName + TemplateExtension;
 
             return File.ReadAllText(textFile);
 
@@ -67,7 +72,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + fileName + ".xml", text);
+            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\" + fileName + ".xml", text);
 
         }
 
@@ -93,6 +98,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             return ReadIntoString("Head")
                         .Replace(PageTitleMask, PageTitle)
+                        .Replace(ControllerNameMask, Type.Name + "Controller")
                         ;
 
         }
@@ -132,7 +138,9 @@ namespace CSSAPODataViewAndControllerGenerator
         private string GetFormHead()
         {
             return ReadIntoString("formHead")
-                    .Replace(FormTitleMask, FormTitle);
+                    .Replace(FormTitleMask, FormTitle)
+                    .Replace(FormViewIdMask, Type.Name)
+                    ;
         }
 
 
@@ -149,7 +157,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             result += GetFoot();
 
-            WriteOut(result, "Form.view", OutputPath);
+            WriteOut(result, Type.Name + "Form.view", OutputPath);
 
             return this;
 
