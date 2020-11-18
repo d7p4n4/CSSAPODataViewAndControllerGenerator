@@ -78,19 +78,10 @@ namespace CSSAPODataViewAndControllerGenerator
             try
             {
 
-                new SAPIndexHTMLGenerator()
-                {
-                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
-                    ,
-                    Title = Config[APPSETTINGS_PAGETITLE]
-                    ,
-                    Parameter = Parameter
-                }
-                    .Generate();
-
                 foreach (PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
                 {
                     Directory.CreateDirectory(Config[APPSETTINGS_OUTPUTPATH] + "sources\\" + planObject.className);
+                    Directory.CreateDirectory(Config[APPSETTINGS_OUTPUTPATH] + "sources\\" + planObject.className + "\\sources");
 
                     new SAPTableViewGenerator()
                     {
@@ -126,8 +117,6 @@ namespace CSSAPODataViewAndControllerGenerator
                     FormTitle = Config[APPSETTINGS_FORMTITLE]
                 ,
                     PageTitle = Config[APPSETTINGS_PAGETITLE]
-                ,
-                    ComboBoxEntityName = Config[APPSETTINGS_COMBOBOXENTITY]
                 }
                 .Generate(new Ac4yClassHandler().GetAc4yClassFromType(planObject.classType));
 
@@ -139,9 +128,21 @@ namespace CSSAPODataViewAndControllerGenerator
                     ODataURL = Config[APPSETTINGS_ODATAURL]
                     ,
                     EntityName = planObject.className
+                    ,
+                    FormTitle = Config[APPSETTINGS_FORMTITLE]
                 }
                     .Generate();
-            }
+
+                    new SAPIndexHTMLGenerator()
+                    {
+                        OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                        ,
+                        Title = Config[APPSETTINGS_PAGETITLE]
+                        ,
+                        EntityName = planObject.className
+                    }
+                        .Generate();
+                }
 
             } catch(Exception exception)
             {

@@ -1,4 +1,5 @@
 ﻿using Ac4yClassModule.Class;
+using Ac4yClassModule.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,6 @@ namespace CSSAPODataViewAndControllerGenerator
         public string OutputPath { get; set; }
         public string FormTitle { get; set; }
         public string PageTitle { get; set; }
-        public string ComboBoxEntityName {get;set;}
 
         public Ac4yClass Type { get; set; }
 
@@ -33,10 +33,10 @@ namespace CSSAPODataViewAndControllerGenerator
             { "TEXTBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" },
             { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#'}\" />" },
             { "NODEF", "<DateTimePicker id=\"#propertyName#Id\" value=\"{path: '#propertyName#'}\" valueFormat=\"yyyy-MM-ddTHH:mm:ss\" displayFormat=\"yyyy-MM-ddTHH:mm:ss\" />" },
-            /*{"COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
+            { "COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
                          "   <core:Item key=\"{Name}\" text=\"{Name}\" />\n " +
-                         "</ComboBox>" }*/
-            { "COMBOBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" }
+                         "</ComboBox>" }
+           // { "COMBOBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" }
         };
 
         #endregion members
@@ -72,7 +72,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\" + fileName + ".xml", text);
+            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\sources\\" + fileName + ".xml", text);
 
         }
 
@@ -98,7 +98,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             return ReadIntoString("Head")
                         .Replace(PageTitleMask, PageTitle)
-                        .Replace(ControllerNameMask, Type.Name + "Controller")
+                        .Replace(ControllerNameMask, Type.Name + "Form")
                         ;
 
         }
@@ -114,21 +114,28 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private string GetContent()
         {
-            string text = ReadIntoString("content");
             string returnText = "";
+            Ac4yClassHandler ac4yClassHandler = new Ac4yClassHandler();
 
             for (int i = 0; i < Type.PropertyList.Count; i++)
             {
+                string text = ReadIntoString("content");
+
                 if (Type.PropertyList[i].Name.Equals("Id"))
                 {
                 }
                 else
                 {
-                    returnText += text.Replace(InputFieldMask, GetInputField(Type.PropertyList[i].WidgetType))
-                                      .Replace(PropertyNameMask, Type.PropertyList[i].Name)
-                                      .Replace(ComboboxEntityMask, ComboBoxEntityName);
+                    text = text.Replace(InputFieldMask, GetInputField(Type.PropertyList[i].WidgetType))
+                                .Replace(PropertyNameMask, Type.PropertyList[i].Name)
+                                ;
 
-                    //returnText = returnText.Replace(PropertyNameMask, Type.PropertyList[i].Name);
+                    if(Type.PropertyList[i].WidgetType.Equals("COMBOBOX"))
+                    {
+                        text = text.Replace(ComboboxEntityMask, ac4yClassHandler.GetAc4yComboboxEntityName(Type.PropertyList[i].PropertyInfo));
+                    };
+
+                    returnText += text;
                 }
             }
 

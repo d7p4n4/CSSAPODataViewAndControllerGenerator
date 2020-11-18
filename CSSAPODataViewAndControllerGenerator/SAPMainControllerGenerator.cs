@@ -25,6 +25,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string SortFieldMask = "#sortField#";
         private const string TableIdMask = "#tableId#";
         private const string FormViewIdMask = "#formViewId#";
+        private const string ControllerNameMask = "#controllerName#";
 
         #endregion members
 
@@ -40,7 +41,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\" + fileName + ".js", text);
+            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\sources\\" + fileName + ".js", text);
 
         }
 
@@ -65,6 +66,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
+                        .Replace(ControllerNameMask, EntityName)
                         ;
 
         }

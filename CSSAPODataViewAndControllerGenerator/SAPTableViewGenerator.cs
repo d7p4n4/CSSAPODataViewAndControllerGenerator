@@ -23,6 +23,8 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string TableIdMask = "#tableId#";
         private const string PropertyNameMask = "#propertyName#";
         private const string PropertyPathMask = "#propertyPath#";
+        private const string ControllerNameMask = "#controllerName#";
+        private const string HeaderTextMask = "#headerText#";
 
         #endregion members
 
@@ -38,7 +40,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\" + fileName + ".xml", text);
+            File.WriteAllText(outputPath + "sources\\" + Type.Name + "\\sources\\" + fileName + ".xml", text);
 
         }
 
@@ -63,6 +65,8 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("head")
+                    .Replace(ControllerNameMask, Type.Name)
+                    .Replace(HeaderTextMask, Type.Name + " entity")
                         ;
 
         }

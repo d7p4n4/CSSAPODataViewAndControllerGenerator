@@ -13,7 +13,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
         public string OutputPath { get; set; }
         public string Title { get; set; }
-        public CSODataGeneratorParameter Parameter { get; set; }
+        public string EntityName { get; set; }
 
 
         private const string TemplateExtension = ".htmlT";
@@ -75,16 +75,8 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private string GetBody()
         {
-            string pagesText = ReadIntoString("pages");
-            string editedPagesText = "";
-
-            foreach(PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
-            {
-                editedPagesText = editedPagesText + pagesText.Replace(PageNameMask, planObject.className);
-            }
-
             return ReadIntoString("body")
-                        .Replace(PagesMask, editedPagesText)
+                        .Replace(PageNameMask, EntityName)
                 ;
         }
 
@@ -99,7 +91,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             result += GetFoot();
 
-            WriteOut(result, "index", OutputPath);
+            WriteOut(result, "index", OutputPath + "\\sources\\" + EntityName + "\\");
 
             return this;
 

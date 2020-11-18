@@ -13,6 +13,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string OutputPath { get; set; }
         public string ODataURL { get; set; }
         public string EntityName { get; set; }
+        public string FormTitle { get; set; }
 
 
         private const string TemplateExtension = ".jsT";
@@ -20,6 +21,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string ODataURLMask = "#odataUrl#";
         private const string EntityNameMask = "#entityName#";
         private const string ControllerNameMask = "#controllerName#";
+        private const string FormTitleMask = "#formTitle#";
 
         #endregion members
 
@@ -35,7 +37,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public void WriteOut(string text, string fileName, string outputPath)
         {
             System.IO.Directory.CreateDirectory(outputPath + "sources");
-            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\" + fileName + ".js", text);
+            File.WriteAllText(outputPath + "sources\\" + EntityName + "\\sources\\" + fileName + ".js", text);
 
         }
 
@@ -60,7 +62,7 @@ namespace CSSAPODataViewAndControllerGenerator
         {
 
             return ReadIntoString("Head")
-                        .Replace(ControllerNameMask, EntityName + "Controller")
+                        .Replace(ControllerNameMask, EntityName + "Form")
                         ;
 
         }
@@ -77,7 +79,8 @@ namespace CSSAPODataViewAndControllerGenerator
         {
             return ReadIntoString("methods")
                     .Replace(ODataURLMask, ODataURL)
-                    .Replace(EntityNameMask, EntityName);
+                    .Replace(EntityNameMask, EntityName)
+                    .Replace(FormTitleMask, FormTitle);
         }
 
         public SAPFormControllerGenerator Generate()
