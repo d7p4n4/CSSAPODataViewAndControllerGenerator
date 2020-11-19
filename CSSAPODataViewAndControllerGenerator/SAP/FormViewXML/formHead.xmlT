@@ -1,0 +1,9 @@
+
+		<l:Grid defaultSpan="L12 M12 S12" width="auto">
+			<l:content>
+				<f:SimpleForm id="#formViewId#Form" minWidth="1024" 
+					maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+					title="#formTitle#" labelSpanL="3" labelSpanM="3" emptySpanL="4"
+					emptySpanM="4" columnsL="1" columnsM="1" class="editableForm">
+					<f:content>
+						<Input id="id" value="{Id}" visible="false" />

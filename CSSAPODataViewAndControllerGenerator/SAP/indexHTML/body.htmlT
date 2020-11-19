@@ -1,0 +1,22 @@
+
+	<script
+        id="sap-ui-bootstrap"
+        src="https://sapui5.netweaver.ondemand.com/resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_bluecrystal"
+		data-sap-ui-libs="sap.m"
+		data-sap-ui-compatVersion="edge"
+		data-sap-ui-bindingSyntax="complex"
+		>
+    </script>
+    
+	<script>
+
+				sap.ui.localResources("sources");
+				var app = new sap.m.App({initialPage:"id#pageName#Main"});
+				var page#pageName# = sap.ui.view({id:"id#pageName#Main", viewName:"sources.#pageName#Main", type:sap.ui.core.mvc.ViewType.XML});
+				app.addPage(page#pageName#);
+				var pageAdd#pageName# = sap.ui.view({id:"id#pageName#Form", viewName:"sources.#pageName#Form", type:sap.ui.core.mvc.ViewType.XML});
+				app.addPage(pageAdd#pageName#);
+				app.placeAt("content");
+
+	</script>

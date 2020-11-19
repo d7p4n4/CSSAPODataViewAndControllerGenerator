@@ -1,0 +1,8 @@
+mkdir #indexFilePath#
+#nginxFiles#
+#nginxFilesSymlinks#
+#folders#
+
+systemctl restart nginx
+
+systemctl start #serviceFileName#.service

@@ -1,0 +1,68 @@
+
+					onInit : function(oEvent) {
+
+						this
+								.getView()
+								.addDelegate(
+										{
+											onBeforeShow : function(evt) {
+												console.log(evt.data);
+												if (this.direction != "back") {
+													if (evt.data.oModel != null) {
+														evt.to.setModel(evt.data.oModel);
+														evt.to.setBindingContext(evt.data);
+													} else {
+														var oModel = new sap.ui.model.odata.v4.ODataModel({
+															groupId: "$direct",
+															synchronizationMode : "None",
+															serviceUrl : "#odataUrl#"
+														});
+														evt.to.setModel(oModel);
+													}
+												}
+											}
+										});
+					},
+
+					handleCancelPress : function() {
+						app.back();
+
+					},
+
+					handleDeletePress : function() {
+						var oModel = this.getView().getModel();
+						var recordId = this.getView().byId("id").getValue();
+						oModel.remove("/#entityName#(" + recordId + ")");
+						oModel.refresh();
+						app.back();
+
+                    },
+                    
+					handleSavePress : function(evt) {
+						var oModel = this.getView().getModel();
+						oModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+
+						console.log(oModel);
+
+						var id = this.getView().byId("id").getValue();
+						if(id == "") {
+
+							var oEntry = oModel.createEntry("/#entityName#");
+							this.getView().setBindingContext(oEntry);
+						}
+						console.log(oModel);
+						oModel.submitBatch("#formTitle#").then(this._fnSuccess, this._fnError);
+						oModel.refresh();
+
+					},
+					_fnSuccess : function() {
+						jQuery.sap.require("sap.m.MessageToast");
+						sap.m.MessageToast.show("Success");
+						app.back();
+
+					},
+					_fnError : function() {
+						jQuery.sap.require("sap.m.MessageToast");
+						sap.m.MessageToast.show("Error");
+
+					},

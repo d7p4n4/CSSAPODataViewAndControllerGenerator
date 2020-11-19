@@ -1,0 +1,13 @@
+		
+        <Table id="#tableId#"
+							items="{/#entityName#}">
+			<headerToolbar>
+				<OverflowToolbar>
+					<content>
+                    </content>
+                </OverflowToolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="Id" />
+				</Column>

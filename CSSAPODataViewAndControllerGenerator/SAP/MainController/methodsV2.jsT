@@ -1,0 +1,18 @@
+
+
+	onInit : function(evt) {
+		
+        var oModel = new sap.ui.model.odata.ODataModel(
+                "#odataUrl#");
+        oModel.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);
+
+        this.getView().setModel(oModel);
+    },
+
+	onDetailPress : function(event) {
+		var bindingContext = event.getSource().getBindingContext();
+		var recordId = bindingContext.getProperty("Id");
+		var myObject = bindingContext.getObject();
+		app.to("#formViewId#Form, "slide", bindingContext);
+
+	},

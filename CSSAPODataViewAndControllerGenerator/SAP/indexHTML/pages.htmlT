@@ -1,0 +1,5 @@
+
+				var page#pageName# = sap.ui.view({id:"id#pageName#Main", viewName:"sources.#pageName#Main", type:sap.ui.core.mvc.ViewType.XML});
+				app.addPage(page#pageName#);
+				var pageAdd#pageName# = sap.ui.view({id:"id#pageName#Form", viewName:"sources.#pageName#Form", type:sap.ui.core.mvc.ViewType.XML});
+				app.addPage(pageAdd#pageName#);

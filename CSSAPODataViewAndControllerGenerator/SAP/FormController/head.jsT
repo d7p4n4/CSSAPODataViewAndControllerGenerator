@@ -1,0 +1,17 @@
+sap.ui
+		.controller(
+				"sources.#controllerName#",
+				{
+					handleNavButtonPress : function(evt) {
+						app.back();
+					},
+					
+		toBoolean: function(fValue) {
+			console.log(fValue);
+			if(fValue === "true") {
+				return true;
+			}
+			else {
+				return false
+			};
+		},

@@ -1,0 +1,6 @@
+
+			</columns>
+			<items>
+				<ColumnListItem type="Detail" detailPress="onDetailPress">
+					<cells>
+						<ObjectIdentifier title="{Id}" />

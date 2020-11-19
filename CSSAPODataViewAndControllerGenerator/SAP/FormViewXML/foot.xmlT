@@ -1,0 +1,16 @@
+
+					</f:content>
+				</f:SimpleForm>
+			</l:content>
+		</l:Grid>
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button id="save" text="Save" type="Emphasized" press="handleSavePress" />
+					<Button id="delete" text="Delete" press="handleDeletePress" />
+					<Button id="cancel" text="Cancel" press="handleCancelPress" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>
