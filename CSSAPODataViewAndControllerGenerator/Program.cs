@@ -38,6 +38,12 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_PARAMETERPATH = "PARAMETERPATH";
         private const string APPSETTINGS_PARAMETERFILENAME = "PARAMETERFILENAME";
 
+        private const string APPSETTINGS_DOMAINNAME = "DOMAINNAME";
+        private const string APPSETTINGS_INDEXFILEPATH = "INDEXFILEPATH";
+        private const string APPSETTINGS_PORTNUMBER = "PORTNUMBER";
+        private const string APPSETTINGS_SERVICEFILENAME = "SERVICEFILENAME";
+        private const string APPSETTINGS_HOMEPATH = "HOMEPATH";
+
         CSODataGeneratorParameter Parameter { get; set; }
 
 
@@ -77,6 +83,24 @@ namespace CSSAPODataViewAndControllerGenerator
 
             try
             {
+                int portNumberPlus = 0;
+
+                new LinuxShellScriptGenerator()
+                {
+                    OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    HomePath = Config[APPSETTINGS_HOMEPATH]
+                    ,
+                    IndexFilePath = Config[APPSETTINGS_INDEXFILEPATH]
+                    ,
+                    ServiceFileName = Config[APPSETTINGS_PLANOBJECTNAMESPACE]
+                    ,
+                    Parameter = Parameter
+                    ,
+                    DomainName = Config[APPSETTINGS_DOMAINNAME]
+
+                }
+                    .Generate();
 
                 foreach (PlanObjectReference planObject in Parameter.PlanObjectReferenceList)
                 {
@@ -142,6 +166,22 @@ namespace CSSAPODataViewAndControllerGenerator
                         EntityName = planObject.className
                     }
                         .Generate();
+
+                    new NginxFileGenerator()
+                    {
+                        OutputPath = Config[APPSETTINGS_OUTPUTPATH]
+                        ,
+                        DomainName = Config[APPSETTINGS_DOMAINNAME]
+                        ,
+                        EntityName = planObject.className
+                        ,
+                        PortNumber = Int16.Parse(Config[APPSETTINGS_PORTNUMBER]) + portNumberPlus
+                        ,
+                        IndexFilePath = Config[APPSETTINGS_INDEXFILEPATH]
+                    }
+                        .Generate();
+
+                    portNumberPlus++;
                 }
 
             } catch(Exception exception)
