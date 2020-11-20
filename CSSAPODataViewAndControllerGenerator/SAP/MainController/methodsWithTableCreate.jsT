@@ -1,0 +1,77 @@
+
+
+	onInit : function(evt) {
+		
+		var oModel = new sap.ui.model.odata.v4.ODataModel({
+			groupId: "$direct",
+			synchronizationMode : "None",
+			serviceUrl : "#odataUrl#"
+		});
+
+        this.getView().setModel(oModel);
+    },
+
+	onDetailPress : function(event) {
+		var bindingContext = event.getSource().getBindingContext();
+		var recordId = bindingContext.getProperty("Id");
+		var myObject = bindingContext.getObject();
+		app.to("id#formViewId#Form", "slide", bindingContext);
+    },
+
+	onCreate : function () {
+		var oList = this.byId("#tableId#"),
+			oBinding = oList.getBinding("items"),
+			// Create a new entry through the table's list binding
+			oContext = oBinding.create({
+				#createdEntities#
+			});
+
+		oList.getItems().some(function (oItem) {
+			if (oItem.getBindingContext() === oContext) {
+				oItem.focus();
+				oItem.setSelected(true);
+				return true;
+			}
+		});
+	},
+
+	_setUIChanges : function (bHasUIChanges) {
+		
+		this.getView().getModel().resetChanges("#updatedGroup#");
+	},
+
+	onResetChanges : function () {
+		this.byId("#tableId#").getBinding("items").resetChanges();
+		this._bTechnicalErrors = false;
+		this._setUIChanges(false);
+	},
+
+	onSave : function () {
+		var fnSuccess = function () {
+			jQuery.sap.require("sap.m.MessageToast");
+			sap.m.MessageToast.show("Saved");
+			this._setUIChanges(false);
+		}.bind(this);
+
+		var fnError = function (oError) {
+			this._setUIChanges(false);
+			MessageBox.error(oError.message);
+		}.bind(this);
+
+		this.getView().getModel().submitBatch("#updatedGroup#").then(fnSuccess, fnError);
+		this._bTechnicalErrors = false; // If there were technical errors, a new save resets them.
+	},
+
+	onRefresh : function () {
+		var oBinding = this.byId("#tableId#").getBinding("items");
+
+		if (oBinding.hasPendingChanges()) {
+			jQuery.sap.require("sap.m.MessageToast");
+			sap.m.MessageToast.show("There are pending changes, no refresh");
+			this._setUIChanges();
+			return;
+		}
+		oBinding.refresh();
+		jQuery.sap.require("sap.m.MessageToast");
+		sap.m.MessageToast.show("Refreshed");
+	},

@@ -4,5 +4,17 @@
 			</items>
 		</Table>
     </content>
-  </Panel>
+			<Button
+				id="saveButton"
+				text="Save"
+				type="Emphasized"
+				press=".onSave"/>
+			<Button
+				id="doneButton"
+				text="Cancel"
+				press=".onResetChanges"/>
+	</Page>
+	</pages>
+  </App>
+  </Shell>
 </mvc:View>

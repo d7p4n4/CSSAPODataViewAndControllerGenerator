@@ -1,2 +1,2 @@
 
-						<Text text="{#propertyPath#}" />
+						#inputField#

@@ -1,9 +1,29 @@
 		
         <Table id="#tableId#"
-							items="{/#entityName#}">
+			   growing="true"
+			   growingThreshold="5"
+				items="{
+					path: '/#entityName#',
+					parameters: {
+						$count: true,
+						$$updateGroupId: '#updateGroup#'
+					}}">
 			<headerToolbar>
 				<OverflowToolbar>
 					<content>
+						<ToolbarSpacer/>
+						<Button
+							id="addUserButton"
+							icon="sap-icon://add"
+							press=".onCreate">
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
+						<Button
+							id="refreshUsersButton"
+							icon="sap-icon://refresh"
+							press=".onRefresh"/>
                     </content>
                 </OverflowToolbar>
 			</headerToolbar>

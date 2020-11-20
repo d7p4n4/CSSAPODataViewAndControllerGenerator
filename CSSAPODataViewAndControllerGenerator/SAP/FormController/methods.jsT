@@ -31,8 +31,12 @@
 
 					handleDeletePress : function() {
 						var oModel = this.getView().getModel();
-						var recordId = this.getView().byId("id").getValue();
-						oModel.remove("/#entityName#(" + recordId + ")");
+						var recordContext = this.getView().getBindingContext();
+						recordContext.delete("$auto").then(function () {
+							MessageToast.show("Deleted");
+						}.bind(this), function (oError) {
+							MessageBox.error(oError.message)
+						});
 						oModel.refresh();
 						app.back();
 
@@ -51,7 +55,7 @@
 							this.getView().setBindingContext(oEntry);
 						}
 						console.log(oModel);
-						oModel.submitBatch("#formTitle#").then(this._fnSuccess, this._fnError);
+						oModel.submitBatch("#updateGroup#").then(this._fnSuccess, this._fnError);
 						oModel.refresh();
 
 					},

@@ -32,7 +32,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string PropertyNameMask = "#propertyName#";
         private const string CreatedEntitiesMask = "#createdEntities#";
 
-        private const string CreatedPropertiesTemplate = "\"#propertyName#\": \"\"";
+        private const string CreatedPropertiesTemplate = "\"#propertyName#\": \"\",";
 
         #endregion members
         public string ReadIntoString(string fileName)
