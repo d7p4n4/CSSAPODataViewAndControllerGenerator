@@ -1,4 +1,5 @@
 ﻿using Ac4yClassModule.Class;
+using Ac4yClassModule.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,8 +26,41 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string PropertyPathMask = "#propertyPath#";
         private const string ControllerNameMask = "#controllerName#";
         private const string HeaderTextMask = "#headerText#";
+        private const string ComboboxEntityMask = "#comboboxEntity#";
+        private const string InputFieldMask = "#inputField#";
+        private const string UpdateGroupMask = "#updateGroup#";
+
+        public Dictionary<string, string> InputMezoKonverziok = new Dictionary<string, string>()
+        {
+            { "TEXTBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" },
+            { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#'}\" />" },
+            { "NODEF", "<DateTimePicker id=\"#propertyName#Id\" value=\"{path: '#propertyName#'}\" valueFormat=\"yyyy-MM-ddTHH:mm:ss\" displayFormat=\"yyyy-MM-ddTHH:mm:ss\" />" },
+            { "COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
+                         "   <core:Item key=\"{Name}\" text=\"{Name}\" />\n " +
+                         "</ComboBox>" }
+           // { "COMBOBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" }
+        };
 
         #endregion members
+
+        public string GetInputField(string type)
+        {
+            string result = "";
+            if (type == null)
+            {
+                type = "TEXTBOX";
+            }
+            try
+            {
+                result = InputMezoKonverziok[type];
+            }
+            catch (Exception exception)
+            {
+                result = "nodeftype (" + type + ")";
+            }
+
+            return result;
+        } // GetConvertedType
 
         public string ReadIntoString(string fileName)
         {
@@ -82,17 +116,28 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private string GetTableItem()
         {
-            string text = ReadIntoString("tableItem");
             string returnText = "";
+            Ac4yClassHandler ac4yClassHandler = new Ac4yClassHandler();
 
             for (int i = 0; i < Type.PropertyList.Count; i++)
             {
+                string text = ReadIntoString("tableItem");
+
                 if (Type.PropertyList[i].Name.Equals("Id"))
                 {
                 }
                 else
                 {
-                    returnText += text.Replace(PropertyPathMask, Type.PropertyList[i].Name);
+                    text = text.Replace(InputFieldMask, GetInputField(Type.PropertyList[i].WidgetType))
+                                .Replace(PropertyNameMask, Type.PropertyList[i].Name)
+                                ;
+
+                    if (Type.PropertyList[i].WidgetType.Equals("COMBOBOX"))
+                    {
+                        text = text.Replace(ComboboxEntityMask, ac4yClassHandler.GetAc4yComboboxEntityName(Type.PropertyList[i].PropertyInfo));
+                    };
+
+                    returnText += text;
                 }
             }
 
@@ -127,7 +172,8 @@ namespace CSSAPODataViewAndControllerGenerator
         {
             return ReadIntoString("tableHead")
                     .Replace(TableIdMask, TableId)
-                    .Replace(EntityNameMask, EntityName);
+                    .Replace(EntityNameMask, EntityName)
+                    .Replace(UpdateGroupMask, EntityName + "Group");
         }
 
 

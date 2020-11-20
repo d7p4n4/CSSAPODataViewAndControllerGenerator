@@ -22,6 +22,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string EntityNameMask = "#entityName#";
         private const string ControllerNameMask = "#controllerName#";
         private const string FormTitleMask = "#formTitle#";
+        private const string UpdateGroupMask = "#updateGroup#";
 
         #endregion members
 
@@ -80,7 +81,8 @@ namespace CSSAPODataViewAndControllerGenerator
             return ReadIntoString("methods")
                     .Replace(ODataURLMask, ODataURL)
                     .Replace(EntityNameMask, EntityName)
-                    .Replace(FormTitleMask, FormTitle);
+                    .Replace(FormTitleMask, FormTitle)
+                    .Replace(UpdateGroupMask, EntityName + "Group");
         }
 
         public SAPFormControllerGenerator Generate()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ac4yClassModule.Class;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -17,6 +18,7 @@ namespace CSSAPODataViewAndControllerGenerator
         public string TableId { get; set; }
         public string EntityName { get; set; }
 
+        public Ac4yClass Type { get; set; }
 
         private const string TemplateExtension = ".jsT";
 
@@ -26,9 +28,13 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string TableIdMask = "#tableId#";
         private const string FormViewIdMask = "#formViewId#";
         private const string ControllerNameMask = "#controllerName#";
+        private const string UpdatedGroupMask = "#updatedGroup#";
+        private const string PropertyNameMask = "#propertyName#";
+        private const string CreatedEntitiesMask = "#createdEntities#";
+
+        private const string CreatedPropertiesTemplate = "\"#propertyName#\": \"\"";
 
         #endregion members
-
         public string ReadIntoString(string fileName)
         {
 
@@ -81,12 +87,23 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private string GetMethods()
         {
-            return ReadIntoString("methods")
+            string createdProperties = "";
+
+            foreach(Ac4yProperty ac4yProperty in Type.PropertyList)
+            {
+                if(!ac4yProperty.Name.Equals("Id"))
+                    createdProperties = createdProperties + "\n" + CreatedPropertiesTemplate.Replace(PropertyNameMask, ac4yProperty.Name);
+            }
+
+            return ReadIntoString("methodsWithTableCreate")
                     .Replace(FormViewIdMask, EntityName)
                     .Replace(ODataURLMask, ODataURL)
                     .Replace(SortFieldMask, SortField)
                     .Replace(SearchFieldMask, SearchField)
-                    .Replace(TableIdMask, TableId);
+                    .Replace(TableIdMask, TableId)
+                    .Replace(UpdatedGroupMask, EntityName + "Group")
+                    .Replace(CreatedEntitiesMask, createdProperties)
+                    ;
         }
 
         public SAPMainControllerGenerator Generate()
@@ -106,6 +123,14 @@ namespace CSSAPODataViewAndControllerGenerator
 
         } // Generate
 
+        public SAPMainControllerGenerator Generate(Ac4yClass type)
+        {
+
+            Type = type;
+
+            return Generate();
+
+        } // Generate
 
 
         public void Dispose()

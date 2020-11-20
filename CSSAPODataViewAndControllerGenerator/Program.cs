@@ -131,7 +131,7 @@ namespace CSSAPODataViewAndControllerGenerator
                     ,
                     EntityName = planObject.className
                 }
-                    .Generate();
+                    .Generate(new Ac4yClassHandler().GetAc4yClassFromType(planObject.classType));
 
 
                 new SAPFormViewGenerator()
