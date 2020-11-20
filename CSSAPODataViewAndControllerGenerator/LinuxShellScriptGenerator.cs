@@ -86,7 +86,7 @@ namespace CSSAPODataViewAndControllerGenerator
                         .Replace(NginxFilesMask, nginxFiles)
                         .Replace(NginxFilesSymlinkMask, nginxFilesSymlink)
                         .Replace(IndexFilePathMask, IndexFilePath)
-                        .Replace(ServiceFileNameMask, ServiceFileName)
+                        .Replace(ServiceFileNameMask, ServiceFileName + "ODataService")
                 ;
         }
 

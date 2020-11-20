@@ -25,15 +25,13 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string APPSETTINGS_FORMTITLE = "FORMTITLE";
         private const string APPSETTINGS_PAGETITLE = "PAGETITLE";
         private const string APPSETTINGS_SEARCHFIELD = "SEARCHFIELD";
-        private const string APPSETTINGS_ENTITYNAME = "ENTITYNAME";
         private const string APPSETTINGS_TABLEID = "TABLEID";
         private const string APPSETTINGS_ODATAURL = "ODATAURL";
-        private const string APPSETTINGS_COMBOBOXENTITY = "COMBOBOXENTITY";
         private const string APPSETTINGS_OUTPUTPATH = "OUTPUTPATH";
 
         private const string APPSETTINGS_LIBRARYPATH = "LIBRARYPATH";
         private const string APPSETTINGS_PLANOBJECTNAMESPACE = "PLANOBJECTNAMESPACE";
-        private const string APPSETTINGS_CLASSNAME = "CLASSNAME";
+        private const string APPSETTINGS_PROJECTNAME = "PROJECTNAME";
 
         private const string APPSETTINGS_PARAMETERPATH = "PARAMETERPATH";
         private const string APPSETTINGS_PARAMETERFILENAME = "PARAMETERFILENAME";
@@ -93,7 +91,7 @@ namespace CSSAPODataViewAndControllerGenerator
                     ,
                     IndexFilePath = Config[APPSETTINGS_INDEXFILEPATH]
                     ,
-                    ServiceFileName = Config[APPSETTINGS_PLANOBJECTNAMESPACE]
+                    ServiceFileName = Config[APPSETTINGS_PROJECTNAME]
                     ,
                     Parameter = Parameter
                     ,
