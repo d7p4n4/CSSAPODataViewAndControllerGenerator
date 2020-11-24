@@ -12,7 +12,7 @@
       <namespaceName>VendorPlanObject.</namespaceName>
       <className>Person</className>
     </PlanObjectReference>
-
+    
     <PlanObjectReference>
       <namespaceName>CSTobbEmeletesPlanObject.</namespaceName>
       <className>Ember</className>

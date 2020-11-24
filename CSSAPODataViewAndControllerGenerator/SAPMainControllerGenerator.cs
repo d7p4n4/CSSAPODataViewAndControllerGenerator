@@ -31,8 +31,9 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string UpdatedGroupMask = "#updatedGroup#";
         private const string PropertyNameMask = "#propertyName#";
         private const string CreatedEntitiesMask = "#createdEntities#";
+        private const string DefaultValueMask = "#defaultValue#";
 
-        private const string CreatedPropertiesTemplate = "\"#propertyName#\": \"\",";
+        private const string CreatedPropertiesTemplate = "\"#propertyName#\": #defaultValue#,";
 
         #endregion members
         public string ReadIntoString(string fileName)
@@ -92,7 +93,26 @@ namespace CSSAPODataViewAndControllerGenerator
             foreach(Ac4yProperty ac4yProperty in Type.PropertyList)
             {
                 if(!ac4yProperty.Name.Equals("Id"))
-                    createdProperties = createdProperties + "\n" + CreatedPropertiesTemplate.Replace(PropertyNameMask, ac4yProperty.Name);
+                {
+                    if(ac4yProperty.TypeName.Equals("Boolean"))
+                    {
+                        createdProperties = createdProperties + "\n" + CreatedPropertiesTemplate
+                                                                            .Replace(PropertyNameMask, ac4yProperty.Name)
+                                                                            .Replace(DefaultValueMask, "false");
+                    } else if(ac4yProperty.TypeName.Equals("DateTime"))
+                    {
+                        createdProperties = createdProperties + "\n" + CreatedPropertiesTemplate
+                                                                            .Replace(PropertyNameMask, ac4yProperty.Name)
+                                                                            .Replace(DefaultValueMask, "\"1990-01-01T00:00:00\"");
+                    } else
+                    {
+                        createdProperties = createdProperties + "\n" + CreatedPropertiesTemplate
+                                                                            .Replace(PropertyNameMask, ac4yProperty.Name)
+                                                                            .Replace(DefaultValueMask, "\"\"");
+                    }
+
+                }
+                    
             }
 
             return ReadIntoString("methodsWithTableCreate")
