@@ -2,7 +2,7 @@
 <CSODataGeneratorParameter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
   <PlanObjectReferenceList>
-<!--
+    <!--
     <PlanObjectReference>
       <namespaceName>VendorPlanObject.</namespaceName>
       <className>Vendor</className>
@@ -12,7 +12,7 @@
       <namespaceName>VendorPlanObject.</namespaceName>
       <className>Person</className>
     </PlanObjectReference>
-    
+
     <PlanObjectReference>
       <namespaceName>CSTobbEmeletesPlanObject.</namespaceName>
       <className>Ember</className>
@@ -27,7 +27,7 @@
       <namespaceName>CSTobbEmeletesPlanObject.</namespaceName>
       <className>Varos</className>
     </PlanObjectReference>
--->
+
     <PlanObjectReference>
       <namespaceName>CSODataEntityWithTwoCombo.</namespaceName>
       <className>Person</className>
@@ -42,7 +42,7 @@
       <namespaceName>CSODataEntityWithTwoCombo.</namespaceName>
       <className>Color</className>
     </PlanObjectReference>
-    
+    -->
   </PlanObjectReferenceList>
 
 </CSODataGeneratorParameter>

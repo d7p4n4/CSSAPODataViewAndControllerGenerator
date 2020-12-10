@@ -1,0 +1,27 @@
+﻿{
+  "OUTPUTPATH": "#rootDirectory#",
+  "TITLE": "Generált SAP felület",
+  "HEADERTEXT": "My cars list",
+  "TABLEID": "MyCarsTable",
+  "ODATAURL": "#odataUrl#",
+  "PAGETITLE": "#pageTitle#",
+  "FORMTITLE": "#formTitle#",
+  "SORTFIELD": "Kategoria",
+  "SEARCHFIELD": "Kategoria",
+  "HOMEPATH": "#homePath#",
+
+  "LIBRARYPATH": "#libraryPath#",
+  "PLANOBJECTNAMESPACE": "#planObjectNamespace#.",
+  "XMLPATH":"D:\\Serialization.xml",
+
+  "PROJECTNAME": "CSVendor",
+
+  "DOMAINNAME": "#domainName#",
+  "PORTNUMBER": "#portNumber#",
+  "INDEXFILEPATH": "#indexFilePath#",
+
+
+  "PARAMETERPATH": "Config\\",
+  "PARAMETERFILENAME": "Parameter.xml"
+
+}

@@ -1,19 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CSAc4yClassFW">
-      <HintPath>C:\library\LPCsharp\CSAc4yClassFW.dll</HintPath>
+    <Reference Include="CSAc4yClassCore">
+      <HintPath>C:\library\LPCsharp\CSAc4yClassCore.dll</HintPath>
     </Reference>
     <Reference Include="CSAc4yFW">
       <HintPath>C:\library\LPCsharp\CSAc4yFW.dll</HintPath>
@@ -33,6 +34,18 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="SAP\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Config\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

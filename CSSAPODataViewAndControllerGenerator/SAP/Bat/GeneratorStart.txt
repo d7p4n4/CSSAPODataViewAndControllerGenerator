@@ -1,0 +1,3 @@
+﻿set generatorDir=#generatorDirectory#
+cd %generatorDir%
+CSSAPODataViewAndControllerGenerator.exe

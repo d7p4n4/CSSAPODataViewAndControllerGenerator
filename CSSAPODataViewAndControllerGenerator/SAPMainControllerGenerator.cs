@@ -126,6 +126,11 @@ namespace CSSAPODataViewAndControllerGenerator
                     ;
         }
 
+        internal void Generate(object p)
+        {
+            throw new NotImplementedException();
+        }
+
         public SAPMainControllerGenerator Generate()
         {
 

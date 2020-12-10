@@ -19,7 +19,6 @@ namespace CSSAPODataViewAndControllerGenerator
         #region members
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private Assembly _library { get; set; }
 
         private const string APPSETTINGS_SORTFIELD = "SORTFIELD";
         private const string APPSETTINGS_FORMTITLE = "FORMTITLE";
@@ -35,6 +34,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string APPSETTINGS_PARAMETERPATH = "PARAMETERPATH";
         private const string APPSETTINGS_PARAMETERFILENAME = "PARAMETERFILENAME";
+        private const string APPSETTINGS_XMLPATH = "XMLPATH";
 
         private const string APPSETTINGS_DOMAINNAME = "DOMAINNAME";
         private const string APPSETTINGS_INDEXFILEPATH = "INDEXFILEPATH";
@@ -55,7 +55,7 @@ namespace CSSAPODataViewAndControllerGenerator
             Config = config;
 
         } // Program
-
+        /*
         public void Run()
         {
             _library = Assembly.LoadFile(
@@ -188,9 +188,10 @@ namespace CSSAPODataViewAndControllerGenerator
             }
             
         } // run
-
+        */
         static void Main(string[] args)
         {
+            Console.WriteLine("Elindultam");
 
             try
             {
@@ -202,15 +203,62 @@ namespace CSSAPODataViewAndControllerGenerator
                 config = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json", true, true)
                             .Build();
+                /*
+                new RunWithDll()
+                {
+                    OdataUrl = config[APPSETTINGS_ODATAURL]
+                    ,
+                    FormTitle = config[APPSETTINGS_FORMTITLE]
+                    ,
+                    PageTitle = config[APPSETTINGS_PAGETITLE]
+                    ,
+                    SearchField = config[APPSETTINGS_SEARCHFIELD]
+                    ,
+                    SortField = config[APPSETTINGS_SORTFIELD]
+                    ,
+                    LibraryPath = config[APPSETTINGS_LIBRARYPATH]
+                    ,
+                    OutputPath = config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    ParameterFileName = config[APPSETTINGS_PARAMETERFILENAME]
+                    ,
+                    ParameterPath = config[APPSETTINGS_PARAMETERPATH]
+                    ,
+                    TableId = config[APPSETTINGS_TABLEID]
+                }
+                    .Run();*/
 
-                new Program(config).Run();
-
+                Ac4yModule ac4yClasses = (Ac4yModule) new Ac4yUtility().Xml2ObjectFromFile(config[APPSETTINGS_XMLPATH], typeof(Ac4yModule));
+                new RunWithXml(ac4yClasses)
+                {
+                    OdataUrl = config[APPSETTINGS_ODATAURL]
+                    ,
+                    FormTitle = config[APPSETTINGS_FORMTITLE]
+                    ,
+                    PageTitle = config[APPSETTINGS_PAGETITLE]
+                    ,
+                    SearchField = config[APPSETTINGS_SEARCHFIELD]
+                    ,
+                    SortField = config[APPSETTINGS_SORTFIELD]
+                    ,
+                    LibraryPath = config[APPSETTINGS_LIBRARYPATH]
+                    ,
+                    OutputPath = config[APPSETTINGS_OUTPUTPATH]
+                    ,
+                    ParameterFileName = config[APPSETTINGS_PARAMETERFILENAME]
+                    ,
+                    ParameterPath = config[APPSETTINGS_PARAMETERPATH]
+                    ,
+                    TableId = config[APPSETTINGS_TABLEID]
+                }
+                    .Run();
             }
             catch (Exception exception)
             {
 
                 log.Error(exception.Message);
                 log.Error(exception.StackTrace);
+                Console.WriteLine(exception.Message + "\n" + exception.StackTrace);
 
                 Console.ReadLine();
 
