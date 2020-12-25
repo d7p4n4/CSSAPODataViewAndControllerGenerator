@@ -29,6 +29,7 @@ namespace CSSAPODataViewAndControllerGenerator
         private const string ComboboxEntityMask = "#comboboxEntity#";
         private const string InputFieldMask = "#inputField#";
         private const string UpdateGroupMask = "#updateGroup#";
+        private const string KeyMask = "#key#";
 
         public Dictionary<string, string> InputMezoKonverziok = new Dictionary<string, string>()
         {
@@ -36,10 +37,50 @@ namespace CSSAPODataViewAndControllerGenerator
             { "CHECKBOX", "<CheckBox id=\"#propertyName#Id\" selected=\"{path: '#propertyName#'}\" />" },
             { "DATETIME", "<DateTimePicker id=\"#propertyName#Id\" value=\"{path: '#propertyName#'}\" valueFormat=\"yyyy-MM-ddTHH:mm:ss\" displayFormat=\"yyyy-MM-ddTHH:mm:ss\" />" },
             { "COMBOBOX", "<ComboBox id=\"#propertyName#Id\" items=\"{/#comboboxEntity#}\" selectedKey=\"{#propertyName#}\">\n " +
-                         "   <core:Item key=\"{Name}\" text=\"{Name}\" />\n " +
+                         "   <core:Item key=\"{#key#}\" text=\"{Name}\" />\n " +
                          "</ComboBox>" }
            // { "COMBOBOX", "<Input id=\"#propertyName#Id\" value=\"{#propertyName#}\" valueLiveUpdate=\"true\" />" }
         };
+
+        public Dictionary<string, string> FormaKonverziok = new Dictionary<string, string>()
+        {
+            { "Int32", "int32" },
+            { "Decimal", "" },
+            { "Money", "integer" },
+            { "Float", "float" },
+            { "Int64", "int64" },
+            { "VarChar", "" },
+            { "Char", "" },
+            { "VarBinary", "byte[]" },
+            { "DateTime", "date-time" },
+            { "Date", "date" },
+            { "TinyInt", "" },
+            { "Bit", "" },
+            { "String", "" },
+            { "Double", "double" },
+            { "Boolean", "" }
+        };
+
+        public bool GetConvertedType(string type, Dictionary<string, string> dictionary)
+        {
+            string result;
+            try
+            {
+                if (dictionary.TryGetValue(type, out result))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception)
+            {
+                result = "";
+            }
+            return false;
+        } // GetConvertedType
 
         #endregion members
 
@@ -123,7 +164,7 @@ namespace CSSAPODataViewAndControllerGenerator
             {
                 string text = ReadIntoString("tableItem");
 
-                if (Type.PropertyList[i].Name.Equals("Id"))
+                if (Type.PropertyList[i].Name.Equals("Id") || GetConvertedType(Type.PropertyList[i].TypeName, FormaKonverziok))
                 {
                 }
                 else
@@ -134,7 +175,15 @@ namespace CSSAPODataViewAndControllerGenerator
 
                     if (Type.PropertyList[i].WidgetType.Equals("COMBOBOX"))
                     {
-                        text = text.Replace(ComboboxEntityMask, ac4yClassHandler.GetAc4yComboboxEntityName(Type.PropertyList[i].PropertyInfo));
+                        text = text.Replace(ComboboxEntityMask, Type.PropertyList[i].ComboboxEntityName);
+                        if(Type.PropertyList[i].NavigationId == true)
+                        {
+                            text = text.Replace(KeyMask, "Id");
+                        }
+                        else
+                        {
+                            text = text.Replace(KeyMask, "Name");
+                        }
                     };
 
                     returnText += text;

@@ -35,6 +35,47 @@ namespace CSSAPODataViewAndControllerGenerator
 
         private const string CreatedPropertiesTemplate = "\"#propertyName#\": #defaultValue#,";
 
+
+        public Dictionary<string, string> FormaKonverziok = new Dictionary<string, string>()
+        {
+            { "Int32", "int32" },
+            { "Decimal", "" },
+            { "Money", "integer" },
+            { "Float", "float" },
+            { "Int64", "int64" },
+            { "VarChar", "" },
+            { "Char", "" },
+            { "VarBinary", "byte[]" },
+            { "DateTime", "date-time" },
+            { "Date", "date" },
+            { "TinyInt", "" },
+            { "Bit", "" },
+            { "String", "" },
+            { "Double", "double" },
+            { "Boolean", "" }
+        };
+
+        public bool GetConvertedType(string type, Dictionary<string, string> dictionary)
+        {
+            string result;
+            try
+            {
+                if (dictionary.TryGetValue(type, out result))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception)
+            {
+                result = "";
+            }
+            return false;
+        } // GetConvertedType
+
         #endregion members
         public string ReadIntoString(string fileName)
         {
@@ -92,7 +133,7 @@ namespace CSSAPODataViewAndControllerGenerator
 
             foreach(Ac4yProperty ac4yProperty in Type.PropertyList)
             {
-                if(!ac4yProperty.Name.Equals("Id"))
+                if(!ac4yProperty.Name.Equals("Id") && !GetConvertedType(ac4yProperty.TypeName, FormaKonverziok))
                 {
                     if(ac4yProperty.TypeName.Equals("Boolean"))
                     {

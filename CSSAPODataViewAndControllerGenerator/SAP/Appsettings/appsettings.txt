@@ -12,7 +12,7 @@
 
   "LIBRARYPATH": "#libraryPath#",
   "PLANOBJECTNAMESPACE": "#planObjectNamespace#.",
-  "XMLPATH":"D:\\Serialization.xml",
+  "XMLPATH":"D:\\ac4y.xml",
 
   "PROJECTNAME": "CSVendor",
 
